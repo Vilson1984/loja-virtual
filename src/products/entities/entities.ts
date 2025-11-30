@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Category } from 'src/category/entities/category.entity';
 
 @Entity('product') // nome da tabela
 export class Product {
@@ -13,4 +14,7 @@ export class Product {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @ManyToOne(() => Category, (category) => category.product)
+  category: Category;
 }
