@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './products/entities/entities';
+import { CategoryModule } from './category/category.module';
+import { Category } from './category/entities/category.entity';
 
 @Module({
   imports: [
@@ -14,10 +16,11 @@ import { Product } from './products/entities/entities';
       username: process.env.DB_USER ?? 'postgres',
       password: process.env.DB_PASS ?? 'root',
       database: process.env.DB_NAME ?? 'loja-virtual',
-      entities: [Product],
+      entities: [Product, Category],
       synchronize: true,
     }),
     ProductsModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
