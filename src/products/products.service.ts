@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Product } from './entities/entities';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import axios from 'axios';
 
 @Injectable()
 export class ProductsService {
@@ -14,8 +15,18 @@ export class ProductsService {
   // métodos para manipular produtos (CRUD) podem ser adicionados aqui abaixo:
   async create(data: CreateProductDto): Promise<Product> {
     const product = this.productsRepository.create(data);
+    const savedProduct = await this.productsRepository.save(product);
     console.log('ESTÁ NO CREATE DE SERVICE', data);
-    return this.productsRepository.save(product);
+
+    await axios.post('http://localhost:3001/webhook', {
+      event: 'PRODUCT_CREATED',
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+    });
+
+    // return this.productsRepository.save(product);
+    return savedProduct;
   }
 
   findAll() {
