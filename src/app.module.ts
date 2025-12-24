@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './products/entities/entities';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entities/category.entity';
-import { ApiExternaController } from './api-externa/api-externa.controller';
+import { PurchaseModule } from './purchase/purchase.module';
 
 @Module({
   imports: [
@@ -22,8 +22,9 @@ import { ApiExternaController } from './api-externa/api-externa.controller';
     }),
     ProductsModule,
     CategoryModule,
+    PurchaseModule,
   ],
-  controllers: [AppController, ApiExternaController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
