@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from './entities/entities';
+import { Product } from './entities/products.entities';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import axios from 'axios';
@@ -36,10 +36,8 @@ export class ProductsService {
 
   async findOne(id: number) {
     const product = await this.productsRepository.findOneBy({ id });
-    console.log(
-      'ESTÁ NO FINDONE DE SERVICE',
-      await this.productsRepository.findOneBy({ id }),
-    );
+    console.log('ESTÁ NO FINDONE DE SERVICE');
+    Logger.log('ESTÁ NO FIND ONE DE SERVICE', product);
     if (!product) {
       throw new NotFoundException(`Produto com ID ${id} não encontrado`);
     }
