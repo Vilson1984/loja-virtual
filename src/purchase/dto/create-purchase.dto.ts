@@ -1,11 +1,13 @@
-import { IsPositive, IsInt, Min } from 'class-validator';
+import { IsPositive, IsInt, Min, IsOptional } from 'class-validator';
 
 export class PurchaseDto {
   @IsInt()
-  idProduct: number;
+  @IsOptional() //Permite atualizar por parte dos campos
+  idProduct?: number;
 
   @IsInt()
   @IsPositive()
+  @IsOptional()
   @Min(1)
   quantity: number;
 }

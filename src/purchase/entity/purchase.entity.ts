@@ -6,7 +6,7 @@ import {
   JoinColumn,
   CreateDateColumn,
 } from 'typeorm';
-import { Product } from 'src/products/entities/entities';
+import { Product } from 'src/products/entities/products.entities';
 
 @Entity()
 export class Purchase {

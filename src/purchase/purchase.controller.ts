@@ -5,6 +5,8 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
+  Delete,
 } from '@nestjs/common';
 import { PurchaseService } from './purchase.service';
 import { PurchaseDto } from './dto/create-purchase.dto';
@@ -28,5 +30,20 @@ export class PurchaseController {
   getPurchaseById(@Param('id', ParseIntPipe) id: number) {
     console.log('Caiu no controller purchase getPurchaseById com id: ', id);
     return this.purchaseService.getPurchaseById(id);
+  }
+
+  @Patch(':id')
+  updatePurchase(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: PurchaseDto,
+  ) {
+    console.log('Caiu no controller purchase updatePurchase com data: ', data);
+    return this.purchaseService.updatePurchase(id, data);
+  }
+
+  @Delete(':id')
+  deletePurchase(@Param('id', ParseIntPipe) id: number) {
+    console.log('Caiu no controller purchase deletePurchase com id: ', id);
+    return this.purchaseService.deletePurchase(id);
   }
 }

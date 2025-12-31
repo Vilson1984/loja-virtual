@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from '../products/entities/entities';
+import { Product } from '../products/entities/products.entities';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PurchaseDto } from './dto/create-purchase.dto';
@@ -14,6 +14,7 @@ export class PurchaseService {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {}
+
   async createPurchase(data: PurchaseDto) {
     const product = await this.productRepository.findOneBy({
       id: data.idProduct,
@@ -44,5 +45,45 @@ export class PurchaseService {
     console.log('Caiu no service purchase getPurchaseById com id: ', id);
     const purchase = await this.purchaseRepository.findOneBy({ id });
     return purchase;
+  }
+
+  async updatePurchase(id: number, data: PurchaseDto) {
+    console.log('Caiu no service purchase updatePurchase com data: ', data);
+    const purchase = await this.purchaseRepository.findOne({
+      where: { id },
+      relations: ['product'], // importante para carregar a relação com o produto
+    });
+    if (!purchase) throw new Error('Compra não encontrada');
+
+    //se mudou o produto
+    if (data.idProduct) {
+      const product = await this.productRepository.findOneBy({
+        id: data.idProduct,
+      });
+
+      if (!product) {
+        throw new Error('Produto não encontrado');
+      }
+
+      purchase.product = product;
+    }
+
+    //se mudou a quantidade
+    if (data.quantity) {
+      purchase.quantity = data.quantity;
+    }
+
+    //atualiza o preço total
+    purchase.totalPrice = Number(purchase.product.price) * purchase.quantity;
+
+    Object.assign(purchase, data); // Atualiza somente os campos fornecidos em data
+    return this.purchaseRepository.save(purchase);
+  }
+
+  async deletePurchase(id: number) {
+    console.log('Caiu no service purchase com id, id');
+    const purchase = await this.purchaseRepository.findOneBy({ id });
+    if (!purchase) throw new Error('Compra não encontrada');
+    return this.purchaseRepository.remove(purchase);
   }
 }
