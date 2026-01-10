@@ -62,4 +62,18 @@ export class ProductsService {
 
     return { message: 'Produto removido com sucesso' };
   }
+
+  async attachImage(productId: number, filename: string) {
+    const product = await this.productsRepository.findOneBy({
+      id: productId,
+    });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    product.imageUrl = `/uploads/products/${filename}`;
+
+    return this.productsRepository.save(product);
+  }
 }
