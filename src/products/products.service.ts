@@ -29,9 +29,9 @@ export class ProductsService {
     return savedProduct;
   }
 
-  findAll() {
+  async findAll() {
     console.log('ESTÁ NO FINDALL DE SERVICE');
-    return this.productsRepository.find();
+    return await this.productsRepository.find();
   }
 
   async findOne(id: number) {

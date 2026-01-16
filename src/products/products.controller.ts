@@ -15,6 +15,7 @@ import { ProductsService } from './products.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Controller('products')
 export class ProductsController {
@@ -27,9 +28,13 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
-    console.log('ESTÁ NO FINDALL DE CONTROLLER');
-    return this.productsService.findAll();
+  async findAll() {
+    console.log(
+      'ESTÁ NO FINDALL DE CONTROLLER',
+      this.productsService.findAll(),
+    );
+
+    return await this.productsService.findAll();
   }
 
   @Get(':id') // cria o endpoint /products/:123
@@ -66,10 +71,9 @@ export class ProductsController {
     }),
   )
   uploadImage(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return this.productsService.attachImage(id, file.filename);
   }
 }
