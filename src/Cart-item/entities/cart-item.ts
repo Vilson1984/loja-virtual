@@ -1,11 +1,12 @@
 import { Cart } from '../../cart/entities/cart.entity';
 import { Product } from '../../products/entities/products.entities';
-import { Column, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
 export class CartItem {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   @ManyToOne(() => Cart, (cart) => cart.items, {
     onDelete: 'CASCADE',
   })
